@@ -1,10 +1,10 @@
-# Module 2 – Timing Libraries, Hierarchical vs. Flat Synthesis, and Efficient Flop Coding
+# Module 2 – Timing Libraries, Hierarchical and Flat Synthesis, and Flip-Flop Coding Styles
 
 ## Overview
 
-This module explores the next stage of the RTL-to-netlist synthesis flow. It focuses on how timing libraries guide standard-cell selection, how hierarchical and flat design structures affect synthesis, and how different flip-flop coding styles in Verilog influence the resulting hardware.
+This module continues the RTL-to-netlist synthesis flow by studying timing libraries, synthesis hierarchy, and flip-flop implementation styles. It also examines how Verilog coding choices affect the hardware inferred during synthesis.
 
-The module uses the **Sky130 standard-cell library** and **Yosys** for synthesis.
+The practical work uses the **Sky130 standard-cell library** with **Yosys** as the synthesis tool.
 
 ### Topics Covered
 
@@ -20,9 +20,9 @@ The module uses the **Sky130 standard-cell library** and **Yosys** for synthesis
 
 ---
 
-## 1. Timing Library
+## 1. Timing Libraries
 
-A timing library provides the information required by the synthesis tool to select appropriate standard cells for a design.
+A timing library contains the electrical and timing information that helps the synthesis tool choose suitable standard cells for an RTL design.
 
 For each standard cell, the library contains information such as:
 
@@ -37,9 +37,9 @@ Libraries are characterized for different operating conditions, such as **slow, 
 
 ---
 
-## 2. Sky130 Library
+## 2. Sky130 Standard-Cell Library
 
-The standard-cell timing library used in this module is:
+The standard-cell timing file considered in this module is:
 
 ```text
 sky130_fd_sc_hd__tt_025C_1v80.lib
@@ -102,9 +102,9 @@ PVT analysis helps ensure that the design operates reliably under different oper
 
 ---
 
-## 4. Hierarchical Synthesis
+## 4. Hierarchical Design and Synthesis
 
-Hierarchical synthesis organizes a design into smaller modules instead of treating the complete design as one large block.
+Hierarchical synthesis divides a design into logical modules, allowing each functional block to remain clearly separated during the synthesis process.
 
 ```text
 Top Module
@@ -126,9 +126,9 @@ For example, a design can contain separate AND and OR modules that are instantia
 
 ---
 
-## 5. Flat Synthesis
+## 5. Flat Design and Synthesis
 
-Flat synthesis removes module boundaries and treats the complete design as a single logic structure.
+Flat synthesis removes the internal module boundaries so that the complete design can be optimized as one combined logic structure.
 
 In Yosys, hierarchy can be removed using:
 
@@ -197,9 +197,9 @@ Here:
 
 ---
 
-## 7. Flip-Flops
+## 7. Flip-Flop Fundamentals
 
-A flip-flop is a sequential storage element used to store one bit of information.
+A flip-flop is a basic sequential element that stores a single bit and updates its output according to the clock and control signals.
 
 Typical signals include:
 
@@ -301,9 +301,9 @@ provides a known starting state.
 
 ---
 
-## 11. Yosys Synthesis Flow
+## 11. Yosys-Based Synthesis Flow
 
-The synthesis flow used in this module is:
+The following sequence represents the main synthesis flow used in this module:
 
 ```text
 RTL Verilog
@@ -407,7 +407,7 @@ write_verilog -noattr synthesized.v
 
 ---
 
-## 13. Synchronous vs. Asynchronous Reset – Synthesis
+## 13. Reset Styles During Synthesis
 
 ### Synchronous Reset
 
@@ -433,7 +433,7 @@ begin
 end
 ```
 
-The appropriate reset style depends on the required hardware architecture.
+The reset style should be selected according to the requirements of the target hardware architecture and its timing behavior.
 
 Synchronous reset keeps reset operation associated with the clock, while asynchronous reset allows the flip-flop to be forced into a known state independently of the clock.
 
@@ -467,6 +467,6 @@ Synchronous reset keeps reset operation associated with the clock, while asynchr
 
 ## Conclusion
 
-This module extends the RTL-to-netlist concepts introduced earlier by exploring the factors that influence technology mapping. It explains how timing libraries and PVT conditions are used, how hierarchical and flat synthesis affect optimization, and how Verilog flip-flop coding styles influence the synthesized hardware.
+This module builds on the RTL-to-netlist flow by examining timing information, PVT conditions, design hierarchy, and sequential coding styles. These concepts show how synthesis decisions influence the final implementation of the RTL.
 
-Using **Yosys** together with the **Sky130 standard-cell library**, the RTL design can be transformed into a technology-specific netlist through synthesis, flip-flop mapping, combinational optimization, and final netlist generation.
+Using **Yosys** and the **Sky130 standard-cell library**, the RTL can be converted into a technology-mapped netlist through synthesis, sequential-cell mapping, combinational optimization, and netlist generation.
