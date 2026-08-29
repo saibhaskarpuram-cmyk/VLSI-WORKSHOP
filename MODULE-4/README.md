@@ -1,16 +1,16 @@
-# Module 4 — GLS, Blocking vs Non-Blocking Assignments & Synthesis-Simulation Mismatch
+# Module 4 — Gate-Level Simulation, Blocking vs Non-Blocking Assignments & Synthesis-Simulation Mismatch
 
 ## 📌 Overview
 
-This module focuses on **Gate-Level Simulation (GLS)**, the correct use of **blocking (`=`)** and **non-blocking (`<=`) assignments**, and the causes of **synthesis-simulation mismatch** in Verilog designs.
+This module explains **Gate-Level Simulation (GLS)**, the proper use of **blocking (`=`)** and **non-blocking (`<=`) assignments**, and common reasons for **synthesis-simulation mismatch** in Verilog designs.
 
-The practical work covers RTL simulation, synthesis using **Yosys**, generation of gate-level netlists, GLS using **Icarus Verilog**, and waveform analysis using **GTKWave**. It also demonstrates how incomplete sensitivity lists and improper assignment styles can cause simulation behavior to differ from the synthesized hardware.
+The practical exercises include RTL simulation, synthesis with **Yosys**, creation of gate-level netlists, GLS using **Icarus Verilog**, and waveform inspection through **GTKWave**. The experiments also show how incomplete sensitivity lists and unsuitable assignment styles can make simulation results differ from the expected hardware behavior.
 
 ---
 
 ## 1. Gate-Level Simulation (GLS)
 
-**Gate-Level Simulation (GLS)** verifies the synthesized gate-level netlist using a testbench instead of simulating the original RTL directly.
+**Gate-Level Simulation (GLS)** is the process of verifying a synthesized gate-level netlist with a testbench rather than directly simulating the original RTL.
 
 ### Basic Flow
 
@@ -26,19 +26,19 @@ RTL Design + Testbench
  Gate-Level Simulation
 ```
 
-The same testbench can be used to compare the behavior of the RTL design with the synthesized implementation.
+The same testbench can be reused to compare RTL behavior with the synthesized gate-level implementation.
 
 ### Why GLS?
 
-GLS helps to:
+GLS is useful to:
 
-* Verify the functionality of the synthesized design.
-* Confirm that synthesis preserves the intended behavior.
-* Identify synthesis-simulation mismatches.
-* Verify gate-level implementation.
-* Perform timing-related verification when delay information is available.
+* Check the functionality of the synthesized circuit.
+* Ensure synthesis has preserved the intended behavior.
+* Detect synthesis-simulation mismatches.
+* Validate the gate-level implementation.
+* Perform timing verification when delay information is available.
 
-> **Note:** Timing-aware GLS requires delay-annotated gate-level models.
+> **Note:** Timing-aware GLS needs delay-annotated gate-level models.
 
 ---
 
@@ -46,7 +46,7 @@ GLS helps to:
 
 ### RTL Description
 
-RTL describes the intended hardware behavior using constructs such as:
+RTL represents the intended hardware behavior using constructs such as:
 
 * `always`
 * `assign`
@@ -63,7 +63,7 @@ assign y = (a & b) | c;
 
 ### Gate-Level Netlist
 
-After synthesis, the RTL is converted into gates or technology-specific standard cells.
+After synthesis, RTL is converted into logic gates or technology-specific standard cells.
 
 ```text
 a ───┐
@@ -73,13 +73,13 @@ b ───┘      │
 c ──────────┘
 ```
 
-The resulting netlist represents the hardware at the gate or cell level rather than using high-level RTL constructs.
+The generated netlist describes the implementation using gates or cells instead of high-level RTL constructs.
 
 ---
 
 ## 3. GLS Using Icarus Verilog
 
-A basic GLS flow using **Icarus Verilog** is:
+A typical GLS flow using **Icarus Verilog** is:
 
 ```text
               RTL Design
@@ -111,19 +111,19 @@ Gate-Level Netlist
     GTKWave
 ```
 
-The generated waveform can then be compared with the RTL simulation waveform.
+The resulting waveform can be compared against the waveform produced by RTL simulation.
 
 ---
 
 ## 4. Example: 2:1 MUX
 
-A simple combinational MUX can be described as:
+A simple combinational MUX can be represented as:
 
 ```verilog
 assign y = (a & b) | c;
 ```
 
-The corresponding gate-level representation is:
+The corresponding gate-level structure is:
 
 ```text
 a ───┐
@@ -133,13 +133,13 @@ b ───┘      │
 c ──────────┘
 ```
 
-The same verification methodology can be applied to larger combinational and sequential circuits.
+The same verification approach can be extended to more complex combinational and sequential designs.
 
 ---
 
 ## 5. Synthesis-Simulation Mismatch
 
-A **synthesis-simulation mismatch** occurs when the behavior observed during RTL simulation differs from the behavior of the synthesized hardware.
+A **synthesis-simulation mismatch** happens when the behavior seen during RTL simulation is different from the behavior of the synthesized hardware.
 
 ```text
 RTL Simulation
@@ -147,13 +147,13 @@ RTL Simulation
 Gate-Level Simulation
 ```
 
-Common causes include:
+Typical causes include:
 
 * Incomplete sensitivity lists.
-* Incorrect use of blocking assignments.
-* Incorrect use of non-blocking assignments.
-* Improper coding of sequential logic.
-* RTL constructs that do not accurately represent the intended hardware.
+* Improper use of blocking assignments.
+* Improper use of non-blocking assignments.
+* Incorrect sequential-logic coding.
+* RTL constructs that fail to represent the intended hardware accurately.
 
 ---
 
@@ -194,7 +194,7 @@ i0
 i1
 ```
 
-Therefore, changes in `i0` or `i1` may not trigger the `always` block.
+Therefore, changes to `i0` or `i1` may not activate the `always` block.
 
 ### Example
 
@@ -212,7 +212,7 @@ Then:
 y = i0 = 0
 ```
 
-If `i0` changes from `0` to `1` while `sel` remains `0`, the block may not execute, causing `y` to remain incorrectly at `0` in simulation.
+If `i0` changes from `0` to `1` while `sel` remains `0`, the block may not run again, so `y` can incorrectly remain `0` in simulation.
 
 ### Correct Approach
 
@@ -228,7 +228,7 @@ begin
 end
 ```
 
-`@(*)` automatically includes the signals required by the combinational block.
+`@(*)` automatically includes the signals used by the combinational block.
 
 ---
 
@@ -250,7 +250,7 @@ For combinational procedural logic:
 always @(*)
 ```
 
-is preferred over an incomplete sensitivity list.
+is preferred instead of an incomplete sensitivity list.
 
 ---
 
@@ -269,7 +269,7 @@ q0 = d;
 q  = q0;
 ```
 
-Blocking assignments execute immediately and sequentially.
+Blocking assignments execute immediately in procedural order.
 
 Conceptually:
 
@@ -281,14 +281,14 @@ Statement 2
 Statement 3
 ```
 
-The next statement sees the value assigned by the previous statement.
+Each following statement can observe the value assigned by the previous statement.
 
 ### Typical Use
 
-Blocking assignments are normally used for:
+Blocking assignments are generally used for:
 
 * Combinational logic.
-* Intermediate calculations inside combinational blocks.
+* Intermediate calculations in combinational blocks.
 * Procedural combinational descriptions.
 
 ---
@@ -312,8 +312,8 @@ With non-blocking assignments:
 
 1. Right-hand-side values are evaluated.
 2. Left-hand-side updates are scheduled.
-3. Updates occur after the current procedural evaluation.
-4. Multiple registers can model parallel clocked behavior.
+3. The scheduled updates occur after the procedural evaluation.
+4. Multiple registers can represent parallel clocked behavior.
 
 Conceptually:
 
@@ -325,7 +325,7 @@ Schedule updates
 Update registers
 ```
 
-This behavior makes non-blocking assignments suitable for sequential logic.
+This makes non-blocking assignments appropriate for sequential logic.
 
 ---
 
@@ -334,10 +334,10 @@ This behavior makes non-blocking assignments suitable for sequential logic.
 | Blocking `=`                            | Non-Blocking `<=`                                                |
 | --------------------------------------- | ---------------------------------------------------------------- |
 | Executes immediately                    | Update is scheduled                                              |
-| Procedural order matters                | Models parallel register updates                                 |
+| Procedural order affects the result     | Represents parallel register updates                             |
 | Later statements can see updated values | Later statements see previous values during the same clock event |
 | Commonly used for combinational logic   | Commonly used for sequential logic                               |
-| Can cause problems in clocked logic     | Preferred for flip-flop/register modeling                        |
+| Can introduce issues in clocked logic   | Preferred for flip-flop/register modeling                        |
 
 ### General Rule
 
@@ -351,7 +351,7 @@ Sequential Logic → Non-Blocking `<=`
 
 ## 11. Blocking Assignment in Sequential Logic
 
-Consider two flip-flops connected in series:
+Consider two flip-flops connected in sequence:
 
 ```text
 d ───► FF1 ───► FF2 ───► q
@@ -375,7 +375,7 @@ begin
 end
 ```
 
-Because blocking assignments execute immediately:
+Since blocking assignments execute immediately:
 
 ```text
 q0 = d
@@ -383,9 +383,9 @@ q0 = d
 q = q0
 ```
 
-The second statement sees the newly updated value of `q0`.
+The second statement observes the newly assigned value of `q0`.
 
-This can make the simulation appear as though the data passes through both registers during the same clock event.
+This can make RTL simulation appear as if data passes through both registers during one clock event.
 
 ---
 
@@ -401,7 +401,7 @@ begin
 end
 ```
 
-Now both RHS values are evaluated before the register updates.
+Both RHS expressions are evaluated before the register values are updated.
 
 ```text
 Clock 1:
@@ -413,7 +413,7 @@ q0 gets new d
 q gets previous q0
 ```
 
-This correctly represents two cascaded flip-flops.
+This correctly models two cascaded flip-flops.
 
 ### Recommended Style
 
@@ -443,7 +443,7 @@ end
 
 ### RTL Simulation
 
-The simulator follows procedural ordering:
+The simulator follows the procedural sequence:
 
 ```text
 q0 = d
@@ -451,21 +451,21 @@ q0 = d
 q = q0
 ```
 
-Therefore, `q` can receive the newly assigned value of `q0`.
+Therefore, `q` can observe the newly assigned value of `q0`.
 
 ### Synthesized Hardware
 
-Synthesis interprets the clocked assignments as sequential hardware and may infer:
+Synthesis interprets the clocked logic as sequential hardware and may infer:
 
 ```text
 d → FF(q0) → FF(q)
 ```
 
-The two flip-flops naturally operate on successive clock events.
+The two flip-flops operate on successive clock events.
 
-Thus, the simulated behavior can differ from the intended hardware behavior.
+Thus, the simulation result can differ from the intended hardware behavior.
 
-> This is why non-blocking assignments are the standard coding style for sequential logic.
+> This is why non-blocking assignments are the recommended style for sequential logic.
 
 ---
 
@@ -488,7 +488,7 @@ The simulator executes:
 2. y  = q0 & c
 ```
 
-So `y` uses the new value of `q0`.
+So `y` uses the newly calculated value of `q0`.
 
 If the statements are reversed:
 
@@ -510,13 +510,13 @@ Statement Order
 Different Simulation Behavior
 ```
 
-This order dependence is undesirable when modeling sequential hardware.
+This order dependence is undesirable for sequential hardware modeling.
 
 ---
 
 ## 15. Blocking Assignments for Combinational Logic
 
-Blocking assignments are appropriate for combinational procedural logic.
+Blocking assignments are suitable for procedural combinational descriptions.
 
 Example:
 
@@ -551,7 +551,7 @@ Sequential    → always @(posedge clk) + <=
 
 ## 16. Ternary Operator MUX
 
-A 2:1 MUX can also be written using the ternary operator:
+A 2:1 MUX can also be described with the ternary operator:
 
 ```verilog
 assign y = sel ? i1 : i0;
@@ -576,7 +576,7 @@ begin
 end
 ```
 
-Both describe the same 2:1 MUX.
+Both descriptions represent the same 2:1 MUX.
 
 ### MUX Representation
 
@@ -616,13 +616,13 @@ sel = 0 → y = i0
 sel = 1 → y = i1
 ```
 
-A testbench can apply different combinations of `i0`, `i1`, and `sel` and verify the output.
+A testbench can apply several combinations of `i0`, `i1`, and `sel` to verify the output.
 
 ---
 
 ## 18. RTL Simulation Using Icarus Verilog
 
-The basic simulation flow is:
+The basic simulation sequence is:
 
 ```text
 Verilog Design
@@ -654,13 +654,13 @@ iverilog -o a.out ternary_operator_mux.v tb_ternary_operator_mux.v
 gtkwave tb_ternary_operator_mux.vcd
 ```
 
-The waveform can be used to verify that the MUX output follows the selected input.
+The waveform can be checked to confirm that the MUX output follows the selected input.
 
 ---
 
 ## 19. Yosys Synthesis Flow
 
-**Yosys** can synthesize the RTL and generate a gate-level netlist.
+**Yosys** can synthesize the RTL and produce a gate-level netlist.
 
 Typical commands are:
 
@@ -714,13 +714,13 @@ VCD
 GTKWave
 ```
 
-Using the same testbench makes it easier to compare RTL and synthesized behavior.
+Using the same testbench simplifies comparison between RTL and synthesized behavior.
 
 ---
 
 ## 21. GLS with Gate-Level Libraries
 
-When the synthesized netlist contains standard-cell library instances, the corresponding Verilog library models must also be available during simulation.
+When the synthesized netlist contains standard-cell instances, the matching Verilog library models must also be included during simulation.
 
 A typical setup may contain:
 
@@ -760,7 +760,7 @@ gtkwave testbench.vcd
 
 ## 22. Blocking-Statement GLS Experiment
 
-This experiment demonstrates how improper blocking assignments in sequential logic can contribute to a synthesis-simulation mismatch.
+This experiment demonstrates how an unsuitable blocking-assignment style in sequential logic can contribute to synthesis-simulation differences.
 
 ### RTL Simulation
 
@@ -814,7 +814,7 @@ View:
 gtkwave tb_blocking_caveat.vcd
 ```
 
-The RTL and GLS waveforms can then be compared to observe the difference in behavior.
+The RTL and GLS waveforms can then be compared to identify behavioral differences.
 
 ---
 
@@ -822,11 +822,11 @@ The RTL and GLS waveforms can then be compared to observe the difference in beha
 
 | RTL Simulation                               | Gate-Level Simulation                               |
 | -------------------------------------------- | --------------------------------------------------- |
-| Uses RTL code                                | Uses synthesized gate-level netlist                 |
-| High-level description                       | Gate/cell-level description                         |
-| Generally faster                             | Generally slower                                    |
-| Verifies intended RTL functionality          | Verifies synthesized implementation                 |
-| Normally does not model physical gate delays | Can model delays when delay information is provided |
+| Uses RTL source code                         | Uses synthesized gate-level netlist                 |
+| High-level hardware description              | Gate/cell-level implementation                      |
+| Usually faster                               | Usually slower                                      |
+| Checks intended RTL functionality            | Checks the synthesized implementation               |
+| Normally excludes physical gate delays      | Can include delays when information is available    |
 | Performed before synthesis                   | Performed after synthesis                           |
 
 ### Simple Comparison
@@ -834,11 +834,11 @@ The RTL and GLS waveforms can then be compared to observe the difference in beha
 ```text
 RTL Simulation
       ↓
-Verify RTL Functionality
+Check RTL Functionality
 
 Gate-Level Simulation
       ↓
-Verify Synthesized Implementation
+Check Synthesized Implementation
 ```
 
 ---
@@ -847,7 +847,7 @@ Verify Synthesized Implementation
 
 ### Functional GLS
 
-Functional GLS verifies the logical behavior of the synthesized netlist.
+Functional GLS checks the logical behavior of the synthesized netlist.
 
 ```text
 Gate-Level Netlist
@@ -859,7 +859,7 @@ Functional GLS
 
 ### Timing GLS
 
-Timing GLS uses delay information along with the gate-level design.
+Timing GLS incorporates delay information along with the gate-level design.
 
 ```text
 Gate-Level Netlist
@@ -871,7 +871,7 @@ Testbench
 Timing GLS
 ```
 
-Timing GLS is useful for checking behavior when propagation delays are taken into account.
+Timing GLS is useful when propagation delays need to be considered during verification.
 
 ---
 
@@ -915,7 +915,7 @@ show
 
 ## 26. Complete Practical Flow
 
-The complete workflow covered in this module is:
+The complete workflow used in this module is:
 
 ```text
                     RTL Design
@@ -946,11 +946,11 @@ The complete workflow covered in this module is:
 ```text
 1. Write RTL
        ↓
-2. Write Testbench
+2. Create Testbench
        ↓
 3. Run RTL Simulation
        ↓
-4. Verify Waveform
+4. Check Waveform
        ↓
 5. Synthesize Using Yosys
        ↓
@@ -958,11 +958,11 @@ The complete workflow covered in this module is:
        ↓
 7. Include Required Gate/Cell Libraries
        ↓
-8. Run GLS Using the Same Testbench
+8. Run GLS With the Same Testbench
        ↓
 9. Generate VCD
        ↓
-10. View Waveform Using GTKWave
+10. Inspect Waveform Using GTKWave
        ↓
 11. Compare RTL and GLS Results
 ```
@@ -971,16 +971,16 @@ The complete workflow covered in this module is:
 
 ## 27. Key Takeaways
 
-* **GLS** verifies the behavior of a synthesized gate-level netlist.
-* The **same testbench** can be used for RTL simulation and GLS.
-* **Yosys** is used to synthesize RTL and generate the gate-level netlist.
-* **Icarus Verilog** can compile and simulate both RTL and gate-level Verilog.
-* **GTKWave** is used to inspect simulation waveforms.
-* Incomplete sensitivity lists can produce incorrect RTL simulation behavior.
+* **GLS** checks the behavior of a synthesized gate-level netlist.
+* The **same testbench** can be reused for RTL simulation and GLS.
+* **Yosys** performs RTL synthesis and generates the gate-level netlist.
+* **Icarus Verilog** can simulate both RTL and gate-level Verilog.
+* **GTKWave** is used to analyze simulation waveforms.
+* Incomplete sensitivity lists can cause incorrect RTL simulation results.
 * Use **blocking (`=`)** for combinational procedural logic.
 * Use **non-blocking (`<=`)** for sequential and clocked logic.
 * Timing GLS requires **delay-annotated gate-level models**.
-* Comparing RTL and GLS helps identify synthesis-simulation mismatches.
+* Comparing RTL and GLS waveforms helps identify synthesis-simulation mismatches.
 
 ---
 
@@ -1016,10 +1016,13 @@ Delay Information
 Timing GLS
 ```
 
-> **Write RTL that clearly represents the intended hardware, use the correct assignment style, and verify the synthesized implementation through GLS.**
+> **Describe the intended hardware clearly, follow the correct assignment style, and verify the synthesized design through GLS.**
 
 ## Conclusion
 
-This module provides a practical understanding of how RTL designs move from functional simulation to synthesized gate-level verification. By studying sensitivity lists, blocking and non-blocking assignments, and GLS, it becomes easier to identify coding practices that can lead to differences between simulation and actual hardware behavior.
+This module gives a practical view of how RTL designs progress from functional simulation to synthesized gate-level verification. Understanding sensitivity lists, blocking and non-blocking assignments, and GLS makes it easier to detect coding practices that may create differences between simulation and hardware behavior.
 
-The experiments with **Icarus Verilog, GTKWave, and Yosys** demonstrate the complete verification flow and highlight the importance of writing synthesis-friendly, hardware-oriented Verilog code.
+The experiments using **Icarus Verilog, GTKWave, and Yosys** demonstrate the verification flow and emphasize the importance of writing synthesis-friendly, hardware-oriented Verilog.
+
+Overall, these practices help improve confidence in the synthesized implementation and reduce the possibility of synthesis-simulation mismatches.
+
