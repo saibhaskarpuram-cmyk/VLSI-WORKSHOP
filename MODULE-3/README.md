@@ -1,24 +1,24 @@
-# Module 3 – Combinational and Sequential Optimizations
+# Module 3 – Combinational and Sequential Logic Optimization
 
 ## Overview
 
-This module focuses on **optimization techniques used during digital synthesis** to simplify RTL designs and generate efficient hardware.
+This module explains **optimization methods used in digital synthesis** to simplify RTL descriptions and produce efficient hardware implementations.
 
-The main goal of optimization is to reduce unnecessary logic while improving:
+The primary objective of optimization is to remove redundant logic while improving:
 
 * **Area**
 * **Power**
 * **Performance**
 
-The module covers both **combinational** and **sequential** optimization using **Verilog RTL and Yosys**.
+The module covers both **combinational** and **sequential** optimization with **Verilog RTL and Yosys tools**.
 
 ---
 
 ## 1. Introduction to Optimization
 
-Optimization in digital design involves simplifying the logic required to implement a given functionality.
+Optimization in digital design reduces the hardware complexity required to realize the intended functionality.
 
-An optimized design can achieve:
+A properly optimized design can provide:
 
 * Reduced hardware area
 * Lower power consumption
@@ -35,11 +35,11 @@ Optimization can be broadly classified into:
 
 # 2. Combinational Logic Optimization
 
-Combinational optimization simplifies logic that depends only on the current inputs.
+Combinational optimization reduces logic whose outputs depend only on the present input values.
 
 ### Objectives
 
-The main objective is to obtain the same functionality with simpler hardware.
+The main objective is to preserve the required functionality using simpler and more efficient hardware.
 
 ### Benefits
 
@@ -120,14 +120,14 @@ Simplifying the expression can remove redundant logic and produce a smaller impl
 
 # 3. Sequential Logic Optimization
 
-Sequential optimization focuses on circuits that contain storage elements such as:
+Sequential optimization targets circuits that use storage elements, including:
 
 * Flip-flops
 * Registers
 * Counters
 * State machines
 
-The objective is to eliminate unnecessary sequential logic while preserving the required behavior.
+The objective is to remove redundant sequential hardware without changing the required circuit behavior.
 
 ### Techniques
 
@@ -147,7 +147,7 @@ The objective is to eliminate unnecessary sequential logic while preserving the 
 
 # 4. Sequential Constant Propagation
 
-Sequential constant propagation identifies flip-flops whose outputs can be proven to always have a constant value.
+Sequential constant propagation detects flip-flop outputs that can be proven to remain at a fixed constant value.
 
 If a flip-flop output is always `0` or always `1`, the flip-flop and related logic may be simplified or removed.
 
@@ -196,7 +196,7 @@ Therefore, the important condition is whether the output `Q` can be proven to **
 
 # 5. State Optimization
 
-State optimization reduces unnecessary or unused states in sequential circuits.
+State optimization removes redundant or unreachable states from sequential circuits.
 
 It can simplify the state representation and reduce the hardware required to implement the state machine.
 
@@ -212,7 +212,7 @@ It can simplify the state representation and reduce the hardware required to imp
 
 # 6. State Optimization – Multiplexer Examples
 
-The following examples demonstrate how Yosys can simplify multiplexer-based combinational logic.
+The following examples illustrate how Yosys can optimize multiplexer-based combinational circuits.
 
 ---
 
@@ -346,7 +346,7 @@ dff_const3.v
 tb_dff_const1.v
 ```
 
-The testbench files are used to simulate the corresponding designs and observe their behavior.
+The testbench files are used to simulate each design and verify its sequential behavior.
 
 ### Simulation Commands
 
@@ -378,7 +378,7 @@ cp dff_const1.v dff_const2.v
 gvim dff_const2.v
 ```
 
-This allows different optimization cases to be created and tested while preserving the original design.
+This makes it possible to create and evaluate multiple optimization cases while keeping the original source available.
 
 ---
 
@@ -402,7 +402,7 @@ The synthesized result can then be compared with the original circuit to determi
 
 # 10. Sequential Optimization – Unused Outputs
 
-Optimization can also remove unnecessary counter bits or sequential logic that does not affect any observable output.
+Optimization may also eliminate counter bits or sequential elements that have no effect on the required observable outputs.
 
 ## Example – Counter
 
@@ -443,7 +443,7 @@ Depending on the synthesis and optimization context, the upper bits may be ident
 
 # 11. Counter Optimization
 
-Counter optimization identifies counter bits or sequential elements that are not required for the observable behavior of the design.
+Counter optimization determines which counter bits or sequential elements are unnecessary for the externally visible behavior.
 
 For example:
 
@@ -544,7 +544,7 @@ If a sequential element can be proven to always produce a constant output, it ma
 
 # 15. Overall Optimization Flow
 
-The general optimization flow covered in this module is:
+The overall optimization sequence discussed in this module is:
 
 ```text
 Verilog RTL
@@ -579,8 +579,9 @@ show
 ---
 ## Conclusion
 
-This module provided an understanding of **combinational and sequential optimization techniques** used in digital VLSI design. Constant propagation, Boolean logic simplification, state optimization, and removal of unused sequential logic help reduce unnecessary hardware while maintaining the required functionality.
+This module developed an understanding of **combinational and sequential optimization techniques** used in digital VLSI design. Constant propagation, Boolean logic simplification, state optimization, and removal of unused sequential logic help reduce unnecessary hardware while maintaining the required functionality.
 
 Using **Verilog RTL, Icarus Verilog, GTKWave, and Yosys**, the optimization process can be simulated, synthesized, and analyzed. These techniques contribute to achieving **smaller area, lower power consumption, reduced switching activity, and improved circuit performance**.
 
-Overall, optimization plays an important role in transforming RTL designs into **efficient and practical hardware implementations**.
+Overall, optimization is an essential step in converting RTL descriptions into **compact, efficient, and practical hardware implementations**.
+
